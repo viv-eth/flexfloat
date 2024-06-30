@@ -34,6 +34,17 @@ extern "C" {
 #define FLEXFLOAT_ROUNDING
 #endif
 
+// Set the stochastic rounding flag
+#ifdef FLEXFLOAT_STOCHASTIC_ROUNDING
+#ifndef FE_STOCHASTIC
+#define FE_STOCHASTIC FLEXFLOAT_STOCHASTIC_ROUNDING
+#endif
+#endif
+
+#ifndef FLEXFLOAT_STOCHASTIC_ROUNDING
+#define FE_STOCHASTIC 0
+#endif
+
 // Enable FP environment access for rounding and flags
 #if defined(FLEXFLOAT_ROUNDING) || defined(FLEXFLOAT_FLAGS)
 #include <fenv.h>

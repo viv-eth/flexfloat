@@ -16,6 +16,8 @@
 */
 
 #include "flexfloat.h"
+#include <stdlib.h> 
+#include <time.h>
 // To avoid manually discerning backend-type for calls from math.h
 #include <tgmath.h>
 
@@ -253,8 +255,25 @@ void flexfloat_sanitize(flexfloat_t *a)
         fegetexceptflag(&flags, FE_ALL_EXCEPT);
 #endif
         // Rounding mode
-        int mode = fegetround();
-        if(mode == FE_TONEAREST && flexfloat_nearest_rounding(a, exp))
+        int mode;
+        #ifdef FLEXFLOAT_STOCHASTIC_ROUNDING
+        mode = FE_STOCHASTIC;
+        #else
+        mode = fegetround();
+        #endif
+
+        // printf("mode == %d\n", mode);
+
+        if (mode == FE_STOCHASTIC) {
+            srand(time(NULL));
+            int_t rounding_value = flexfloat_rounding_value(a, exp, sign);
+            double random_value = (double)rand() / RAND_MAX;
+            if (random_value < 0.5)
+            {
+                a->value += CAST_TO_FP(rounding_value); // round up
+            }
+        }
+        else if(mode == FE_TONEAREST && flexfloat_nearest_rounding(a, exp))
         {
             int_t rounding_value = flexfloat_rounding_value(a, exp, sign);
             a->value +=  CAST_TO_FP(rounding_value);

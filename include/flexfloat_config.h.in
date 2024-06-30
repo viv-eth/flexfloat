@@ -5,6 +5,7 @@
 #cmakedefine FLEXFLOAT_ON_QUAD
 #cmakedefine FLEXFLOAT_ON_DOUBLE
 #cmakedefine FLEXFLOAT_NO_ROUNDING
+// #cmakedefine FLEXFLOAT_STOCHASTIC_ROUNDING
 #cmakedefine FLEXFLOAT_FLAGS
 #cmakedefine FLEXFLOAT_STATS
 #cmakedefine FLEXFLOAT_TRACKING
